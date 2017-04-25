@@ -19,9 +19,9 @@ import java.util.ArrayList;
 
 public class FileParser extends UntypedActor {
     
-    private Router router = createRouter();
+    private Router router = customRouter();
     
-    private Router createRouter() {
+    private Router customRouter() {
         ArrayList<Routee> listOfRoutees = new ArrayList<Routee>();
         final Props props = Props.create(FileScanner.class);
         for (int i = 0; i < 25; i++) {
@@ -36,27 +36,26 @@ public class FileParser extends UntypedActor {
     public void onReceive(Object object) throws Exception {
         if (object instanceof ReadFileInput) {
             ReadFileInput readFile = (ReadFileInput) object;
-            System.out.println("FileParser. Start parsing file: " + readFile.getInputStream());
+            System.out.println("Currently Parsing... Please wait ");
             parseFile(readFile.getInputStream());
         }
     }
     
     private void parseFile(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        int i = 0;
+        int lineCount = 0;
         String line = bufferedReader.readLine();
+        
         while (line != null) {
-            i++;
+        	lineCount++;
             router.route(new LineScanner(line), self());
             line = bufferedReader.readLine();
         }
         
-        sendFinishParsingMessage(i);
-    }
-    
-    private void sendFinishParsingMessage(int i) {
+        // Create the finish message and send it
         Props props = Props.create(Aggregator.class);
         ActorRef aggregator = context().actorOf(props);
-        aggregator.tell(new Finish(Finish.FinishType.FILE, i), self());
+        aggregator.tell(new Finish(Finish.FinishType.FILE, lineCount), self());   
     }
+   
 }

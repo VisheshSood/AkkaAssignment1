@@ -4,13 +4,13 @@ import java.io.InputStream;
 
 public class ReadFileInput {
     
-    private InputStream input;
+    private InputStream inputStream;
     
-    public ReadFileInput(String file) {
-        input = this.getClass().getClassLoader().getResourceAsStream(file);
+    public ReadFileInput(String fileInput) {
+    	inputStream = this.getClass().getClassLoader().getResourceAsStream(fileInput);
     }
     
     public InputStream getInputStream() {
-        return input;
+        return inputStream;
     }
 }

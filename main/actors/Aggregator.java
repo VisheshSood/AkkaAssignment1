@@ -46,7 +46,7 @@ public class Aggregator extends UntypedActor  {
     private void finishMessage(Finish message) {
         switch (message.getFinishType()) {
             case FILE:
-            	ExpectedLineCount = message.getNumberOf();
+            	ExpectedLineCount = message.getCount();
             	break;
             case LINE:
             	CurrentLineCount++;

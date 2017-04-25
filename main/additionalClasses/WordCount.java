@@ -1,5 +1,5 @@
 package additionalClasses;
-// Custom class that keeps track of the words in the file. 
+
 public class WordCount {
     
     private String Word;
@@ -17,5 +17,5 @@ public class WordCount {
     public int getCount() {
         return Count;
     }
-   
+    
 }

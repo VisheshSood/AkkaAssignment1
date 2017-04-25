@@ -7,30 +7,26 @@ import akka.actor.UntypedActor;
 import additionalClasses.LineScanner;
 
 public class FileScanner extends UntypedActor {
-	
-	private int LineCount = 0;
-	
-	@Override
-	  public void onReceive(Object object) throws Exception {
-	    if (object instanceof LineScanner) {
-	    	LineScanner processLine = (LineScanner) object;
-	    	System.out.println("FileScanner. Line: " + LineCount);
-	    	LineCount++;
-	    	processLine(processLine.getLine());
-	    }
-	  }
-
-	  private void processLine(String line) {
-	    String[] wordsInLine = splitLineToWords(line);
-	    System.out.println(wordsInLine.length);
-	    WordCount wordCount = new WordCount("Word Count", wordsInLine.length);
-	    Aggregator.getAggregator().tell(wordCount, self());
-	    Aggregator.getAggregator().tell(new Finish(Finish.FinishType.LINE, wordsInLine.length), self());
-	  }
-
-	 
-
-	  private String[] splitLineToWords(String line) {
-	    return line.split("\\s+");
-	  }
-	}
+        
+    @Override
+    public void onReceive(Object object) throws Exception {
+        if (object instanceof LineScanner) {
+            LineScanner processLine = (LineScanner) object;
+            //System.out.println("FileScanner. Line: " + LineCount);
+            //LineCount++;
+            processLine(processLine.getLine());
+        }
+    }
+    
+    private void processLine(String line) {
+        //Aggregator actor split words in the lines by the space “ “ character based on the “line” event
+    	String[] wordsInLine = line.split("\\s+"); // split line by spaces
+        //System.out.println(wordsInLine.length);
+        WordCount wordCount = new WordCount("Word Count", wordsInLine.length);
+        //Aggregator actor counts the number of words in a file
+        Aggregator.getAggregator().tell(wordCount, self());
+        // Let aggregator know that the line is complete by passing a finish message
+        Aggregator.getAggregator().tell(new Finish(Finish.FinishType.LINE, wordsInLine.length), self());
+    }
+    
+}
