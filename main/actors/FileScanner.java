@@ -12,12 +12,15 @@ public class FileScanner extends UntypedActor {
     public void onReceive(Object object) throws Exception {
         if (object instanceof LineScanner) {
             LineScanner processLine = (LineScanner) object;
-            //System.out.println("FileScanner. Line: " + LineCount);
-            //LineCount++;
             processLine(processLine.getLine());
         }
     }
     
+    /*
+     * processLine function
+     * Accepts a String which would be the line and processes it by splitting it by spaces
+     * and then keeping track of the count.
+     */
     private void processLine(String line) {
         //Aggregator actor split words in the lines by the space “ “ character based on the “line” event
     	String[] wordsInLine = line.split("\\s+"); // split line by spaces

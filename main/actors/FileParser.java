@@ -41,13 +41,18 @@ public class FileParser extends UntypedActor {
         }
     }
     
+    /*
+     * parseFile function
+     * Accepts an InputStream and basde on the input parses the file by calling the right
+     * actor based on the progress
+     */
     private void parseFile(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         int lineCount = 0;
         String line = bufferedReader.readLine();
         
         while (line != null) {
-        	lineCount++;
+        	lineCount++; // keeps track of the line
             router.route(new LineScanner(line), self());
             line = bufferedReader.readLine();
         }

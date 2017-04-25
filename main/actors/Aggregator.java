@@ -42,7 +42,12 @@ public class Aggregator extends UntypedActor  {
         }
     }
     
-   
+    /*
+     * finishMessage function
+     * Accepts a parameter of type Finish and based on the message does what it has to do
+     * This could be either update the ExpectedLineCount if the File is finished, or 
+     * update the current line count if the line is complete.
+     */
     private void finishMessage(Finish message) {
         switch (message.getFinishType()) {
             case FILE:
@@ -52,12 +57,16 @@ public class Aggregator extends UntypedActor  {
             	CurrentLineCount++;
             	break;
         }
-        
+      
         if (ExpectedLineCount >= 0 && ExpectedLineCount == CurrentLineCount) {
             finalMessage();
         }
     }
     
+    /*
+     * finalMessage Function
+     * Prints what is required to standard output and exits the system.
+     */
     private void finalMessage() {
         System.out.println("Total Word Count: " + WordCountFinal);
         System.out.println("Total Line Count: " + CurrentLineCount);
